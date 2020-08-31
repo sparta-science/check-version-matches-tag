@@ -10,6 +10,11 @@
 plist_version=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" $1)
 
 echo "Info.plist version: $plist_version"
-echo "Current tag: $GITHUB_REF"
+echo "Current Github reference: $GITHUB_REF"
 
-test "refs/tags/v$plist_version" == "$GITHUB_REF"
+if [[ $GITHUB_REF == refs/tags/v* ]]
+then
+  test "refs/tags/v$plist_version" == "$GITHUB_REF"
+else
+  echo "Skipping Info plist version check because not on tag that starts with v"
+fi
